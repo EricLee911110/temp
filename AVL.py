@@ -1,3 +1,5 @@
+
+
 class treeNode():
     def __init__(self, data=None, left=None, right=None, balance=None, height=0, ancestor=None):
         self.data = data
@@ -22,7 +24,7 @@ while True:
 		input_operations.append(line)
 	except:
 		break
-
+    
 root = treeNode()
 root.data = inputs[0]
 
@@ -194,7 +196,7 @@ for i in range(1, len(inputs)):
 
     
     # what's the condition
-    if len(resultNodes) != 0:
+    while len(resultNodes) != 0:
         whichNode = resultNodes[0]
         copy_whichNode = whichNode.create_copy()
         #print(whichNode.data)
@@ -242,22 +244,26 @@ for i in range(1, len(inputs)):
                     whichNode.ancestor.right = leftRotate(copy_whichNode)
                     
                 operations.append("RR")
-    
+
+        resultNodes = []
+        whichNode = postOrder(root)
+
     printPostOrder(root)
         
 
 def deleteNode(node, num1):
-    if num1 == node.data:
-        #print(f"Eliminating the target: {num1}")
-        if num1 < node.ancestor.data:
-            node.ancestor.left = None
+    if node != None:
+        if num1 == node.data:
+            #print(f"Eliminating the target: {num1}")
+            if num1 < node.ancestor.data:
+                node.ancestor.left = None
+            else:
+                node.ancestor.right = None
+        
+        elif num1 < node.data:
+            deleteNode(node.left, num1)
         else:
-            node.ancestor.right = None
-    
-    elif num1 < node.data:
-        deleteNode(node.left, num1)
-    else:
-        deleteNode(node.right, num1)
+            deleteNode(node.right, num1)
 
 for i in range(len(input_operations)):
     if input_operations[i].split(' ')[0] == "I":
@@ -272,7 +278,7 @@ for i in range(len(input_operations)):
 
         
         # what's the condition
-        if len(resultNodes) != 0:
+        while len(resultNodes) != 0:
             whichNode = resultNodes[0]
             copy_whichNode = whichNode.create_copy()
             #print(whichNode.data)
@@ -320,6 +326,8 @@ for i in range(len(input_operations)):
                         whichNode.ancestor.right = leftRotate(copy_whichNode)
                         
                     operations.append("RR")
+            resultNodes = []
+            whichNode = postOrder(root)
 
     if input_operations[i].split(' ')[0] == "D":
         num1 = int(input_operations[i].split(' ')[1])
@@ -330,7 +338,7 @@ for i in range(len(input_operations)):
         resultNodes = []
         whichNode = postOrder(root, True)
         
-        if len(resultNodes) != 0:
+        while len(resultNodes) != 0:
             whichNode = resultNodes[0]
             copy_whichNode = whichNode.create_copy()
             #print(f"critical node: {whichNode.data}")
@@ -351,7 +359,7 @@ for i in range(len(input_operations)):
                     #print("R0") # L0
                     # RR
                     if whichNode.ancestor == None:
-                        #print("no ancestor")
+                        ##print("no ancestor")
                         root = leftRotate(copy_whichNode)
                     elif whichNode.data < whichNode.ancestor.data:
                         #print("smaller than ancestor")
@@ -407,7 +415,9 @@ for i in range(len(input_operations)):
                     else:
                         whichNode.ancestor.right = LRRotate(copy_whichNode)
                     operations.append("R-1")
-
+            resultNodes = []
+            whichNode = postOrder(root)
+                   
     printPostOrder(root)
     #print("round done")
 
@@ -421,13 +431,18 @@ ans_nodes = []
 getAnsNodes(root, ans_nodes)
 for i in range(len(ans_nodes)):
     if i == len(ans_nodes) - 1:
-        print(ans_nodes[i])
+        print(str(ans_nodes[i]))
     else:
-        print(ans_nodes[i], end=" ")
-print(len(operations))
+        print(str(ans_nodes[i]), end=" ")
+print(str(len(operations)))
 for i in range(len(operations)):
     if i == len(operations) - 1:
-        print(operations[i])
+        print(str(operations[i]))
     else:
-        print(operations[i], end=",")
+        print(str(operations[i]), end=",")
+
+
+
+
+
 
